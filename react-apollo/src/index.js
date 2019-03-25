@@ -7,7 +7,8 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 import './app.css';
-import CustomerAuthWithMutation from './components/CustomerAuth';
+import LoginPage from './modules/authentication/login';
+import RegisterPage from './modules/authentication/register';
 import {
   NavLink,
   Link,
@@ -63,7 +64,9 @@ ReactDOM.render((
         <div className="fl w-100 pl4 pr4">
           <Switch>
           <Route exact path="/" component={App} />
-            <Route exact path="/login" component={CustomerAuthWithMutation} />
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/register" component={RegisterPage} />
+            
             { /* 
             <Route path="/drafts" component={CustomerAuthWithMutation} />
             <Route path="/create" component={CreatePage} />

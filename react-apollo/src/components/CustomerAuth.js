@@ -7,9 +7,13 @@ class CustomerAuth extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       nonFieldErrorMessage: null,
+      firstNameErrorMessage: null,
+      lastNameErrorMessage: null,
       emailErrorMessage: null,
       passwordErrorMessage: null
     };
@@ -43,22 +47,26 @@ class CustomerAuth extends Component {
 
   resetInputFields(){
     this.setState({
+      firstName: '',
+      lastName: '',
       email: '',
       password: ''
     });
   }
 
-  handleSubmit(email, password){
+  handleSubmit(email, password, firstName=null, lastName = null){
     this.resetErrorMessages();
     if (this.props.newCustomer) {
-      this.createCustomerAccount(email, password)
+      this.createCustomerAccount(firstName, lastName, email, password)
     } else {
       this.loginCustomerAccount(email, password)
     }
   }
 
-  createCustomerAccount(email, password){
+  createCustomerAccount(firstName, lastName, email, password){
     const input = {
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       password: password
     }
@@ -66,8 +74,8 @@ class CustomerAuth extends Component {
       { variables: { input }
       }).then((res) => {
         if (res.data.customerCreate.customer){
-           this.props.closeCustomerAuth();
-           this.props.showAccountVerificationMessage();
+           //this.props.closeCustomerAuth();
+           //this.props.showAccountVerificationMessage();
         } else {
           res.data.customerCreate.userErrors.forEach(function (error) {
             if (error.field) {
@@ -93,7 +101,7 @@ class CustomerAuth extends Component {
       { variables: { input }
       }).then((res) => {
       if (res.data.customerAccessTokenCreate.customerAccessToken) {
-        this.props.associateCustomerCheckout(res.data.customerAccessTokenCreate.customerAccessToken.accessToken);
+        //this.props.associateCustomerCheckout(res.data.customerAccessTokenCreate.customerAccessToken.accessToken);
       } else {
         res.data.customerAccessTokenCreate.userErrors.forEach(function (error) {
           if (error.field != null) {
@@ -117,16 +125,35 @@ class CustomerAuth extends Component {
           {this.state.nonFieldErrorMessage &&
             <div className="error">{this.state.nonFieldErrorMessage}</div>
           }
+                    
+                    {this.props.newCustomer && <div>
+          <div>
+          <label className="CustomerAuth__credential">First Name: </label>
+            <input className="CustomerAuth__input" type="text" placeholder="John" name={"firstName"} value={this.state.firstName} onChange={this.handleInputChange}></input>
+            {this.state.firstNameErrorMessage &&
+              <div className="error">{this.state.firstNameErrorMessage}</div>
+            }
+          </div>
+
+<div>
+<label className="CustomerAuth__credential">Last Name: </label>
+  <input className="CustomerAuth__input" type="text" placeholder="Doe" name={"lastName"} value={this.state.lastName} onChange={this.handleInputChange}></input>
+  {this.state.lastNameErrorMessage &&
+    <div className="error">{this.state.lastNameErrorMessage}</div>
+  }
+</div>
+</div>}
+
           <div>
           <label className="CustomerAuth__credential">E-mail: </label>
-            <input className="CustomerAuth__input" type="email" placeholder="Email" name={"email"} value={this.state.email} onChange={this.handleInputChange}></input>
+            <input className="CustomerAuth__input" type="email" placeholder="john.doe@example.com" name={"email"} value={this.state.email} onChange={this.handleInputChange}></input>
             {this.state.emailErrorMessage &&
               <div className="error">{this.state.emailErrorMessage}</div>
             }
           </div>
           <div>
           <label className="CustomerAuth__credential">Password: </label>
-            <input className="CustomerAuth__input" type="password" placeholder="Password" name={"password"} value={this.state.password} onChange={this.handleInputChange}></input>
+            <input className="CustomerAuth__input" type="password" placeholder="********" name={"password"} value={this.state.password} onChange={this.handleInputChange}></input>
             {this.state.passwordErrorMessage &&
               <div className="error">{this.state.passwordErrorMessage}</div>
             }
