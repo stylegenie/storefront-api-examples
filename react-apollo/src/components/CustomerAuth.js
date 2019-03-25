@@ -111,35 +111,30 @@ class CustomerAuth extends Component {
   }
 
   render() {
-    return (
-      <div className={`CustomerAuth ${this.props.isCustomerAuthOpen ? 'CustomerAuth--open' : ''}`}>
-        <button
-          onClick={() => { this.props.closeCustomerAuth(); this.resetErrorMessages(); this.resetInputFields();}}
-          className="CustomerAuth__close">
-          ×
-        </button>
+    return (<div>
         <div className="CustomerAuth__body">
           <h2 className="CustomerAuth__heading">{this.props.newCustomer ? 'Create your Account' : 'Log in to your account'}</h2>
           {this.state.nonFieldErrorMessage &&
             <div className="error">{this.state.nonFieldErrorMessage}</div>
           }
-          <label className="CustomerAuth__credential">
+          <div>
+          <label className="CustomerAuth__credential">E-mail: </label>
             <input className="CustomerAuth__input" type="email" placeholder="Email" name={"email"} value={this.state.email} onChange={this.handleInputChange}></input>
             {this.state.emailErrorMessage &&
               <div className="error">{this.state.emailErrorMessage}</div>
             }
-          </label>
-          <label className="CustomerAuth__credential">
+          </div>
+          <div>
+          <label className="CustomerAuth__credential">Password: </label>
             <input className="CustomerAuth__input" type="password" placeholder="Password" name={"password"} value={this.state.password} onChange={this.handleInputChange}></input>
             {this.state.passwordErrorMessage &&
               <div className="error">{this.state.passwordErrorMessage}</div>
             }
-          </label>
+          </div>
           <button className="CustomerAuth__submit button" type="submit" onClick={() => this.handleSubmit(this.state.email, this.state.password)}>{this.props.newCustomer ? 'Create Account' : 'Log in'}</button>
         </div>
       </div>
-
-    )
+          )
   }
 }
 
