@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
+import GoogleLogin from 'react-google-login';
+    import { GoogleLogout } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 
 class CustomerAuth extends Component {
   constructor(props) {
@@ -63,7 +66,7 @@ class CustomerAuth extends Component {
     }
   }
 
-  createCustomerAccount(firstName, lastName, email, password){
+  createCustomerAccount(firstName, lastName, email, password="@Spark123"){
     const input = {
       firstName: firstName,
       lastName: lastName,
@@ -91,6 +94,12 @@ class CustomerAuth extends Component {
         }
     });
   }
+
+  /*
+  const responseGoogle = (response) => {
+    alert(response);
+    }
+*/
 
   loginCustomerAccount(email, password){
     const input = {
@@ -120,11 +129,33 @@ class CustomerAuth extends Component {
 
   render() {
     return (<div>
+      { /* 
+      <div className="Flash__message-wrapper">
+          <p className={`Flash__message ${this.state.accountVerificationMessage ? 'Flash__message--open' : ''}`}>We have sent you an email, please click the link included to verify your email address</p>
+        </div>
+    */}
+
         <div className="CustomerAuth__body">
           <h2 className="CustomerAuth__heading">{this.props.newCustomer ? 'Create your Account' : 'Log in to your account'}</h2>
           {this.state.nonFieldErrorMessage &&
             <div className="error">{this.state.nonFieldErrorMessage}</div>
           }
+                    
+<div>
+  <FacebookLogin
+    appId="782225908844289"
+    autoLoad={true}
+    fields="name,email,picture"
+    callback={(response)=>this.createCustomerAccount("", "", response.email)} />
+
+  <GoogleLogin
+    clientId="260403298362-9ku1tp21scfn8qct15rdii58hu3btrd3.apps.googleusercontent.com"
+    buttonText="Login with Google"
+    onSuccess={(response)=>this.createCustomerAccount("", "", response.getBasicProfile().getEmail())}
+    onFailure={(response)=>alert(JSON.stringify(response))}
+    cookiePolicy={'single_host_origin'}
+  />
+  </div>
                     
                     {this.props.newCustomer && <div>
           <div>

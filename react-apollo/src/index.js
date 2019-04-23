@@ -9,6 +9,7 @@ import { ApolloProvider } from 'react-apollo';
 import './app.css';
 import LoginPage from './modules/authentication/login';
 import RegisterPage from './modules/authentication/register';
+import DetailPage from './modules/products/details';
 import {
   NavLink,
   Link,
@@ -66,11 +67,11 @@ ReactDOM.render((
           <Route exact path="/" component={App} />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />
-            
+            <Route path="/product/:handle" component={DetailPage} />
+
             { /* 
             <Route path="/drafts" component={CustomerAuthWithMutation} />
             <Route path="/create" component={CreatePage} />
-            <Route path="/post/:id" component={DetailPage} />
 */ }
           </Switch>
         </div>

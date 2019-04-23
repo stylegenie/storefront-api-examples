@@ -5,6 +5,7 @@ import CustomerAuthWithMutation from './components/CustomerAuth';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Link } from 'react-router-dom';
 import {
   createCheckout,
   checkoutLineItemsAdd,
@@ -104,7 +105,7 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.data.loading) {
+if (this.props.data.loading) {
       return <p>Loading ...</p>;
     }
     if (this.props.data.error) {
@@ -117,29 +118,26 @@ class App extends Component {
           <p className={`Flash__message ${this.state.accountVerificationMessage ? 'Flash__message--open' : ''}`}>We have sent you an email, please click the link included to verify your email address</p>
         </div>
         <header className="App__header">
-          {!this.state.isCartOpen &&
-            <div className="App__view-cart-wrapper">
-              <button className="App__view-cart" onClick={()=> this.setState({isCartOpen: true})}>Cart</button>
-            </div>
-          }
           <div className="App__title">
-            <h1>{this.props.data.shop.name}: React Example</h1>
+            <h1>{this.props.data.shop.name}</h1>
             <h2>{this.props.data.shop.description}</h2>
           </div>
         </header>
         <div className="Product-wrapper">
           { this.props.data.shop.products.edges.map(product =>
-            <Product addVariantToCart={this.addVariantToCart} checkout={this.state.checkout} key={product.node.id.toString()} product={product.node} />
-          )}
+            <div>
+            <div>
+{ product.node.images.edges.length ? <img src={product.node.images.edges[0].node.src} alt={`${product.node.title} product shot`}/> : null}
+            <Link className="no-underline ma1" to={`/product/${product.node.handle}`}>
+            <h3>{product.node.title}</h3>
+            </Link>
+            <p>Price: {product.node.variants.edges[0].node.price}</p>
+</div>
+<hr/>
+</div>
+)}
         </div>
-        <Cart
-          removeLineItemInCart={this.removeLineItemInCart}
-          updateLineItemInCart={this.updateLineItemInCart}
-          checkout={this.state.checkout}
-          isCartOpen={this.state.isCartOpen}
-          handleCartClose={this.handleCartClose}
-          customerAccessToken={this.state.customerAccessToken}
-        />
+        
       </div>
     );
   }
@@ -159,6 +157,7 @@ const query = gql`
           node {
             id
             title
+            handle
             options {
               id
               name
